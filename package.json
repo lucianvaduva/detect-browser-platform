@@ -1,0 +1,15 @@
+{
+  "name": "detect-browser-platform",
+  "version": "1.0.0",
+  "description": "Detect browser and platform ",
+  "main": "detect-browser-platform.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "browser",
+    "platform"
+  ],
+  "author": "Vaduva Ionut Lucian",
+  "license": "ISC"
+}
