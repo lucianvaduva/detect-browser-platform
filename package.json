@@ -11,5 +11,13 @@
     "platform"
   ],
   "author": "Vaduva Ionut Lucian",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lucianvaduva/detect-browser-platform.git"
+  },
+  "bugs": {
+    "url": "https://github.com/lucianvaduva/detect-browser-platform/issues"
+  },
+  "homepage": "https://github.com/lucianvaduva/detect-browser-platform#readme"
 }

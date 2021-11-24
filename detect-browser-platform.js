@@ -1,82 +1,126 @@
-
 const isOpera = () => {
+    let checked = false;
     try {
-        return (!!window.opr && !!window.opr.addons) ||
+        checked = (!!window.opr && !!window.opr.addons) ||
             !!window.opera ||
             navigator.userAgent.indexOf(' OPR/') >= 0;
     } catch (error) {
-        return false;
+        checked = false;
     }
+    return checked;
 }
 
 const isFirefox = () => {
+    let checked = false;
     try {
-        return typeof InstallTrigger !== 'undefined';
+        checked = typeof InstallTrigger !== 'undefined';
     } catch (error) {
-        return false;
+        checked = false;
     }
+    return checked;
 }
 
 const isAppleSafari = () => {
+    let checked = false;
     try {
-        return /constructor/i.test(window.HTMLElement) ||
+        checked = /constructor/i.test(window.HTMLElement) ||
             (function (p) {
                 return p.toString() === '[object SafariRemoteNotification]';
             })(!window.safari || (typeof safari !== 'undefined' && window.safari.pushNotification));
     } catch (error) {
-        return false;
+        checked = false;
     }
+    return checked;
 }
 
 const isInternetExplorer = () => {
+    let checked = false;
     try {
-        return /* @cc_on!@ */ false || !!document.documentMode;
+        checked = /* @cc_on!@ */ false || !!document.documentMode;
     } catch (error) {
-        return false;
+        checked = false;
     }
+    return checked;
 }
 
 const isMicrosoftEdge = () => {
+    let checked = false;
     try {
-        return !isIE && !!window.StyleMedia;
+        chekced = !isIE && !!window.StyleMedia;
     } catch (error) {
-        return false;
+        chekced = false;
     }
+    return checked;
 }
 
 const isChromiumEdge = () => {
+    let checked = false;
     try {
-        return isChrome && navigator.userAgent.indexOf('Edg') !== -1;
+        if (window.chrome) {
+            const { userAgentData } = window.navigator;
+            if (userAgentData.brands) {
+                if (userAgentData.brands.find((brandEntry) => brandEntry.brand === 'Chromium') && userAgentData.brands.find((brandEntry) => brandEntry.brand === 'Microsoft Edge')) {
+                    checked = true;
+                }
+            }
+        }
     } catch (error) {
-        return false;
+        checked = false;
     }
+    return checked;
 }
 
 const isGoogleChrome = () => {
+    let checked = false;
     try {
-        return !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);
+        if (window.chrome) {
+            const { userAgentData } = window.navigator;
+            if (userAgentData.brands) {
+                if (userAgentData.brands.find((brandEntry) => brandEntry.brand === 'Chromium') && userAgentData.brands.find((brandEntry) => brandEntry.brand === 'Google Chrome')) {
+                    checked = true;
+                }
+            }
+        }
     } catch (error) {
-        return false;
+        checked = false;
     }
+    return checked;
 }
 
 const browsers = {
-    opera: { name: "Opera", detectionMethod: isOpera },
-    chrome: { name: "Google Chrome", detectionMethod: isGoogleChrome },
-    firefox: { name: "Mozilla Firefox", detectionMethod: isFirefox },
-    safari: { name: "Apple Safari", detectionMethod: isAppleSafari },
-    ie: { name: "Internet Explorer", detectionMethod: isInternetExplorer },
-    edge: { name: "Microsoft Edge", detectionMethod: isMicrosoftEdge },
-    newEdge: { name: "Chromium Edge", detectionMethod: isChromiumEdge }
+    opera: { name: "Opera", detectionMethod: isOpera, userAgentTag: 'Opera' },
+    chrome: { name: "Google Chrome", detectionMethod: isGoogleChrome, userAgentTag: 'Chrome' },
+    firefox: { name: "Mozilla Firefox", detectionMethod: isFirefox, userAgentTag: 'Firefox' },
+    safari: { name: "Apple Safari", detectionMethod: isAppleSafari, userAgentTag: 'Safari' },
+    ie: { name: "Internet Explorer", detectionMethod: isInternetExplorer, userAgentTag: null },
+    edge: { name: "Microsoft Edge", detectionMethod: isMicrosoftEdge, userAgentTag: null },
+    newEdge: { name: "Chromium Edge", detectionMethod: isChromiumEdge, userAgentTag: 'Chrome' }
 }
 
-const detectBrowserType = () => {
+const getEnvironmentInformation = () => {
+    let browserInfo = {
+        brand: 'N/A',
+        version: 'N/A'
+    }
+    let detectedBrowser = null;
+    const { userAgent } = window.navigator;
     Object.keys(browsers).forEach(browser => {
         if (browsers[browser].detectionMethod()) {
-            return browsers[browser].name
+            detectedBrowser = browsers[browser];
         }
     })
-    return 'Browser type could not be detected';
+    if (detectedBrowser) {
+        browserInfo.brand = detectedBrowser.name;
+        if (detectedBrowser.userAgentTag) {
+            const browserVersion = userAgent.split(" ").find(el => el.includes(detectedBrowser.userAgentTag)).split("/")[1];
+            if (browserVersion) {
+                browserInfo.version = browserVersion
+            }
+        }
+
+    }
+    return { browserInfo };
+
 }
 
-module.exports.detectBrowserType = detectBrowserType;
+module.exports.getEnvironmentInformation = getEnvironmentInformation;
