@@ -1,10 +1,11 @@
 {
   "name": "detect-browser-platform",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Detect browser and platform ",
-  "main": "detect-browser-platform.js",
+  "main": "lib/detect-browser-platform.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel src -d lib"
   },
   "keywords": [
     "browser",
@@ -19,5 +20,10 @@
   "bugs": {
     "url": "https://github.com/lucianvaduva/detect-browser-platform/issues"
   },
-  "homepage": "https://github.com/lucianvaduva/detect-browser-platform#readme"
+  "homepage": "https://github.com/lucianvaduva/detect-browser-platform#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.16.0",
+    "@babel/core": "^7.16.0",
+    "@babel/preset-env": "^7.16.4"
+  }
 }

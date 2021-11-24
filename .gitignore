@@ -2,3 +2,6 @@
 dist
 index.html
 index.js
+node_modules
+testing
+package-lock.json

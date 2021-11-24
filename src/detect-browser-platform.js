@@ -46,9 +46,9 @@ const isInternetExplorer = () => {
 const isMicrosoftEdge = () => {
     let checked = false;
     try {
-        chekced = !isIE && !!window.StyleMedia;
+        checked = !isIE && !!window.StyleMedia;
     } catch (error) {
-        chekced = false;
+        checked = false;
     }
     return checked;
 }
@@ -92,7 +92,7 @@ const browsers = {
     chrome: { name: "Google Chrome", detectionMethod: isGoogleChrome, userAgentTag: 'Chrome' },
     firefox: { name: "Mozilla Firefox", detectionMethod: isFirefox, userAgentTag: 'Firefox' },
     safari: { name: "Apple Safari", detectionMethod: isAppleSafari, userAgentTag: 'Safari' },
-    ie: { name: "Internet Explorer", detectionMethod: isInternetExplorer, userAgentTag: null },
+    ie: { name: "Internet Explorer", detectionMethod: isInternetExplorer, userAgentTag: 'MSIE' },
     edge: { name: "Microsoft Edge", detectionMethod: isMicrosoftEdge, userAgentTag: null },
     newEdge: { name: "Chromium Edge", detectionMethod: isChromiumEdge, userAgentTag: 'Chrome' }
 }
@@ -110,9 +110,16 @@ const getEnvironmentInformation = () => {
         }
     })
     if (detectedBrowser) {
+        let browserVersion = 'N/A';
         browserInfo.brand = detectedBrowser.name;
         if (detectedBrowser.userAgentTag) {
-            const browserVersion = userAgent.split(" ").find(el => el.includes(detectedBrowser.userAgentTag)).split("/")[1];
+            if (detectedBrowser.userAgentTag === browsers.ie.userAgentTag) {
+                if (navigator.userAgent.indexOf(browsers.ie.userAgentTag) != -1) {
+                    browserVersion = navigator.userAgent.substr(navigator.userAgent.indexOf(browsers.ie.userAgentTag) + 5, 4);
+                }
+            } else {
+                browserVersion = userAgent.split(" ").find(el => el.includes(detectedBrowser.userAgentTag)).split("/")[1];
+            }
             if (browserVersion) {
                 browserInfo.version = browserVersion
             }
